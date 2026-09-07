@@ -33,6 +33,10 @@ selbst arbeiten), `claude.Bash` / `Read` / `Edit` / `Write` / `WebSearch`, und f
 Aufgabe** mit `claude -p "<vollstaendiger Auftrag>"` in der Shell. Das Werkzeug `claude.Agent`
 funktioniert ueber die Bruecke nicht.
 
+**Modellwahl bei der Uebergabe.** `claude -p --model <alias>`: Standard `opus`; `fable` fuer Design,
+Texte und schwierige Urteile; `sonnet` fuer Fliessbandarbeit. Manu steuert mit Worten: „gruendlich"
+heisst `fable`, „schnell" heisst `sonnet`. Nennt er ein Modell, gilt seins.
+
 **Kosten.** `Skill`, `Bash`, `Read`, `Edit`, `Write` kosten nichts beim anderen Abo, weil dort kein
 Modell denkt. `claude -p` schon. Also erst das Wissen holen, und nur abgeben, wenn das
 Urteil des anderen Modells wirklich gebraucht wird.

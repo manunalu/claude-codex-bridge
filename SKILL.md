@@ -98,6 +98,22 @@ kennt keine Agenten-Typen, Antwort "Available agents: none"). Fuer ganze Aufgabe
 benutzen. Geprueft am 07.09.2026, Antwort in rund 16 Sekunden, mit Zugriff auf die geteilten Skills
 und die Projektregeln.
 
+### Welches Claude-Modell bei einer Uebergabe
+
+`claude -p --model <alias> "<Auftrag>"`. Aliase: `opus`, `fable`, `sonnet`, `haiku`.
+
+| Aufgabe | Modell | Warum |
+|---|---|---|
+| **Standard, wenn nichts dagegen spricht** | `opus` | Bestes Verhaeltnis aus Urteil und Kosten, ist auch die Voreinstellung |
+| Design, Texte, schwierige Urteile, Architektur | `fable` | Staerkstes Modell, kostet rund das Doppelte |
+| Fliessbandarbeit, viele kleine Schritte, Umbenennen, Tests | `sonnet` | Schnell und guenstig, reicht fuer klar umrissene Arbeit |
+| Ganz kleine Nachschlage-Aufgaben | `haiku` | Nur wenn es wirklich trivial ist |
+
+**Manu steuert das mit normalen Worten, nicht mit Modellnamen.** Sagt er „mach das gruendlich",
+„das ist wichtig" oder „nimm dir Zeit", dann `fable`. Sagt er „schnell", „nur kurz" oder
+„Kleinkram", dann `sonnet`. Nennt er ein Modell ausdruecklich, gilt seins ohne Diskussion.
+Ohne Hinweis: `opus`.
+
 **Der guenstige Normalfall ist `Skill`, nicht `claude -p`.** `Skill` laesst den rufenden Agenten mit
 dem Wissen des anderen arbeiten und kostet nichts beim anderen Abo. `claude -p` ist fuer die Faelle,
 in denen das Urteil des anderen Modells gebraucht wird.
