@@ -14,8 +14,10 @@ PDF- und Tabellen- und Praesentations-Werkzeuge, Codex Cloud.
 
 **Was nur Claude kann** (dorthin abgeben, ohne zu fragen): Artifacts (veroeffentlichbare Seiten mit
 Zustand, Abhaklisten zum Mitschreiben), Unteragenten und Workflow (mehrere Pruefer parallel),
-Gedaechtnis ueber Sitzungen, angebundene Dienste (Slack, Notion, Gmail, Kalender, Drive, Figma,
-Canva), iOS-Simulator.
+Gedaechtnis ueber Sitzungen, iOS-Simulator.
+
+**Angebundene Dienste** (Slack, Notion, Gmail, Kalender, Drive, Figma, Canva) hat inzwischen jede
+Seite selbst. Wer gefragt wird, macht es. Nur bei fehlender oder nicht angemeldeter Verbindung abgeben.
 
 **Wo beide koennen** (Stand 09/2026, unabhaengige Messungen): Rechnen und Algorithmen, Sicherheits-
 pruefung, lange klar umrissene Laeufe und Netzrecherche gehen an **Codex**. Texte, Planung,

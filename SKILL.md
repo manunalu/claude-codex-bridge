@@ -34,11 +34,16 @@ durchdenken".
 | **Artifacts** | Veroeffentlichbare Seiten mit eigener Adresse, mit Zustand und Datenbank. Abhaklisten, an denen der Mensch Haken setzt und kommentiert, die der Agent spaeter wieder liest. **Kein Ersatz bauen:** wer eine Abhakliste braucht, gibt sie ab (`claude -p`), statt sie als GitHub-Issue oder Textliste nachzubilden. |
 | **Unteragenten und Workflow** | Mehrere Pruefer parallel, ein Verifizierer dagegen. Fuer Audits und Konzile. |
 | **Gedaechtnis ueber Sitzungen** | Entscheidungen und Vorlieben bleiben, ohne dass jemand sie erneut erklaert. |
-| **Angebundene Dienste** | Slack, Notion, Gmail, Kalender, Drive, Figma, Canva als echte Schnittstellen statt als Klickarbeit. |
 | **iOS-Simulator** | App starten, tippen, Screenshot pruefen. |
 
 Wenn eine Aufgabe eine dieser Faehigkeiten braucht, geht sie dorthin. Auch dann, wenn der andere
 Agent gerade vorne sitzt.
+
+### Beide koennen es, keine Uebergabe noetig
+
+**Angebundene Dienste:** Slack, Notion, Gmail, Kalender, Drive, Figma und Canva gibt es fuer beide
+Seiten als eigene Verbindung. Wer gefragt wird, macht es selbst. Nur wenn die eigene Verbindung fehlt
+oder nicht angemeldet ist, gibt er ab und sagt das dazu.
 
 ---
 
