@@ -189,6 +189,21 @@ python3 ~/.agents/skills/claude-codex/scripts/faden.py lesen <thema> [--anzahl 3
 **Regel: bei jeder Uebergabe den passenden Faden nehmen, nicht `claude -p` blank.** Nur wenn kein
 Thema passt, einen neuen anlegen (`--ordner` setzt den Projektordner) oder blank arbeiten.
 
+**Codex-Thread und Claude-Faden fest koppeln.** Das ist der bequeme Weg: einmal koppeln, danach
+findet sich der Faden von allein.
+
+```sh
+faden.py koppeln <thema>          # einmal im Codex-Thread ausfuehren, merkt sich $CODEX_THREAD_ID
+faden.py hier "<Auftrag>"         # ab jetzt in diesem Thread, ohne Thema zu tippen
+```
+
+Codex setzt in jedem Zug die Variable `CODEX_THREAD_ID`. `koppeln` schreibt sie in den Faden,
+`hier` liest sie wieder. So gehoert ein Codex-Thread dauerhaft zu einem Claude-Chat: Was in
+Codex besprochen wird, landet beim Uebergeben immer im selben Claude-Chat.
+
+**Regel fuer Codex: in einem gekoppelten Thread immer `faden.py hier` nehmen.** Erst wenn das
+mit Rueckgabewert 2 meldet, dass keine Kopplung besteht, das Thema selbst waehlen.
+
 **Einen bestehenden Chat als Faden nehmen.** Es muss kein leerer neuer sein:
 
 ```sh

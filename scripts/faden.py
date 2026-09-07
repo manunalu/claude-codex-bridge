@@ -15,7 +15,13 @@ Aufrufe:
   faden.py lesen <thema> [--anzahl 3]             letzte Antworten aus dem Faden lesen
   faden.py suchen [wort]                          bestehende Claude-Sitzungen zeigen (zum Ansteuern)
   faden.py setzen <thema> <kennung>               Faden auf eine BESTEHENDE Sitzung zeigen lassen
+  faden.py koppeln <thema> [codex-kennung]        diesen Codex-Thread fest an den Faden haengen
+  faden.py hier "<auftrag>"                       Auftrag in den Faden geben, der zu DIESEM Codex-Thread gehoert
   faden.py <thema> ... --ordner /pfad             Arbeitsordner beim Anlegen festlegen
+
+Kopplung: Codex setzt in jedem Zug CODEX_THREAD_ID. Wer einmal `koppeln` ausfuehrt, merkt sich
+diese Kennung im Faden. Danach findet `hier` den richtigen Faden von allein, ohne dass jemand
+das Thema tippen muss.
 
 Der Faden gehoert zu einem Ordner, weil Claude-Sitzungen pro Projektordner liegen. Ohne --ordner
 wird der aktuelle Ordner genommen.
@@ -116,6 +122,21 @@ def sitzungen(suchwort=None, grenze=25):
     return treffer[:grenze]
 
 
+def codex_thread():
+    """Kennung des Codex-Threads, aus dem dieser Aufruf kommt (leer, wenn nicht aus Codex)."""
+    return os.environ.get('CODEX_THREAD_ID', '').strip()
+
+
+def faden_zu_codex(kennung):
+    """Welcher Faden haengt an diesem Codex-Thread?"""
+    if not kennung:
+        return None
+    for name, e in lade().items():
+        if kennung in (e.get('codex') or []):
+            return name
+    return None
+
+
 def hole_faden(name, ordner_arg):
     reg = lade()
     if name in reg:
@@ -153,6 +174,8 @@ def main():
             pfad = sitzungsdatei(e['kennung'], e['ordner'])
             zeilen = sum(1 for _ in open(pfad, encoding='utf-8')) if pfad else 0
             print(f"  {name:14} {e['kennung']}  {zeilen:>4} Zeilen  {e['ordner']}")
+            for c in (e.get('codex') or []):
+                print(f"  {'':14} gekoppelt an Codex-Thread {c}")
         return
 
     if a.befehl == 'suchen':
@@ -192,6 +215,28 @@ def main():
         print(f"  Ordner: {reg[name]['ordner']}")
         return
 
+    if a.befehl == 'koppeln':
+        if not a.rest:
+            sys.exit('Aufruf: faden.py koppeln <thema> [codex-kennung]')
+        name = a.rest[0]
+        kennung = a.rest[1] if len(a.rest) > 1 else codex_thread()
+        if not kennung:
+            sys.exit('Keine Codex-Kennung. Entweder mitgeben oder aus einem Codex-Zug heraus aufrufen.')
+        reg = lade()
+        if name not in reg:
+            sys.exit(f'Faden "{name}" gibt es nicht. faden.py liste zeigt alle.')
+        schon = faden_zu_codex(kennung)
+        if schon and schon != name:
+            print(f'Hinweis: dieser Codex-Thread hing bisher am Faden "{schon}". Er haengt jetzt an beiden.')
+        reg[name].setdefault('codex', [])
+        if kennung not in reg[name]['codex']:
+            reg[name]['codex'].append(kennung)
+        sichere(reg)
+        print(f'Codex-Thread {kennung} ist jetzt am Faden "{name}".')
+        print(f'  Claude-Sitzung: {reg[name]["kennung"]}')
+        print('  Ab jetzt reicht in diesem Thread: faden.py hier "<auftrag>"')
+        return
+
     if a.befehl == 'lesen':
         if not a.rest:
             sys.exit('Thema fehlt: faden.py lesen <thema>')
@@ -206,6 +251,21 @@ def main():
 
     # Auftrag in einen Faden geben
     name = a.befehl
+    if name == 'hier':
+        ct = codex_thread()
+        if not ct:
+            sys.exit('CODEX_THREAD_ID ist nicht gesetzt. "hier" geht nur aus einem Codex-Zug heraus.')
+        treffer = faden_zu_codex(ct)
+        if not treffer:
+            print(f'Dieser Codex-Thread ({ct}) haengt an keinem Faden.', file=sys.stderr)
+            print('Einmalig koppeln, dann geht es immer:', file=sys.stderr)
+            print(f'  faden.py koppeln <thema>', file=sys.stderr)
+            print('Vorhandene Faeden:', file=sys.stderr)
+            for n, e in sorted(lade().items()):
+                print(f'  {n:14} {e["ordner"]}', file=sys.stderr)
+            sys.exit(2)
+        name = treffer
+        print(f'Codex-Thread gehoert zum Faden "{name}".', file=sys.stderr)
     auftrag = ' '.join(a.rest).strip()
     if not auftrag:
         sys.exit('Auftrag fehlt: faden.py <thema> "<auftrag>"')
