@@ -189,6 +189,18 @@ python3 ~/.agents/skills/claude-codex/scripts/faden.py lesen <thema> [--anzahl 3
 **Regel: bei jeder Uebergabe den passenden Faden nehmen, nicht `claude -p` blank.** Nur wenn kein
 Thema passt, einen neuen anlegen (`--ordner` setzt den Projektordner) oder blank arbeiten.
 
+**Einen bestehenden Chat als Faden nehmen.** Es muss kein leerer neuer sein:
+
+```sh
+faden.py suchen [wort]            # bestehende Claude-Sitzungen mit erster Zeile zeigen
+faden.py setzen <thema> <kennung> # den Faden auf diese Sitzung zeigen lassen
+```
+
+So arbeitet Codex in dem Chat weiter, den der Mensch schon kennt, mit dessen ganzer Geschichte.
+**Achtung bei sehr langen Chats:** jeder Zug schickt den Verlauf erneut mit. Ein Chat mit
+Zehntausenden Zeilen ist teuer und langsam. Fuer viele kleine Auftraege lieber einen frischen Faden,
+fuer inhaltlich anschliessende Arbeit den bestehenden.
+
 Ein Faden ist eine echte Claude-Sitzung mit fester Kennung, sie liegt beim Projektordner des Themas.
 Der Mensch findet sie in der Claude-App unter diesem Ordner. Nach der Uebergabe sagt der rufende
 Agent den Fadennamen, damit der Mensch weiss, wo er nachschauen kann.

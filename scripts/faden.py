@@ -13,6 +13,8 @@ Aufrufe:
   faden.py liste                                  Faeden zeigen
   faden.py <thema> "<auftrag>" [--modell opus]    Auftrag in den Faden geben (legt ihn bei Bedarf an)
   faden.py lesen <thema> [--anzahl 3]             letzte Antworten aus dem Faden lesen
+  faden.py suchen [wort]                          bestehende Claude-Sitzungen zeigen (zum Ansteuern)
+  faden.py setzen <thema> <kennung>               Faden auf eine BESTEHENDE Sitzung zeigen lassen
   faden.py <thema> ... --ordner /pfad             Arbeitsordner beim Anlegen festlegen
 
 Der Faden gehoert zu einem Ordner, weil Claude-Sitzungen pro Projektordner liegen. Ohne --ordner
@@ -64,6 +66,56 @@ def letzte_antworten(kennung, ordner, anzahl=3):
     return out[-anzahl:]
 
 
+
+def sitzungen(suchwort=None, grenze=25):
+    """Alle Claude-Sitzungen mit erster Nutzerzeile, neueste zuerst."""
+    treffer = []
+    for pfad in glob.glob(os.path.expanduser('~/.claude/projects/*/*.jsonl')):
+        try:
+            groesse = os.path.getsize(pfad)
+            if groesse < 400:
+                continue
+            erste = ''
+            with open(pfad, encoding='utf-8') as f:
+                for zeile in f:
+                    try:
+                        d = json.loads(zeile)
+                    except Exception:
+                        continue
+                    m = d.get('message') or {}
+                    if d.get('type') == 'user':
+                        c = m.get('content')
+                        if isinstance(c, str):
+                            erste = c
+                        elif isinstance(c, list):
+                            erste = ' '.join(x.get('text', '') for x in c if isinstance(x, dict) and x.get('type') == 'text')
+                        erste = ' '.join(erste.split())[:90]
+                        if erste and not erste.startswith('<'):
+                            break
+                        erste = ''
+            if not erste:
+                continue
+            ordner = ''
+            try:
+                with open(pfad, encoding='utf-8') as f2:
+                    for z2 in f2:
+                        d2 = json.loads(z2)
+                        if d2.get('cwd'):
+                            ordner = d2['cwd'].replace(os.path.expanduser('~'), '~')
+                            break
+            except Exception:
+                ordner = os.path.basename(os.path.dirname(pfad))
+            eintrag = {'kennung': os.path.basename(pfad)[:-6], 'zeit': os.path.getmtime(pfad),
+                       'erste': erste, 'ordner_roh': os.path.dirname(pfad), 'ordner': ordner}
+            if suchwort and suchwort.lower() not in erste.lower() and suchwort.lower() not in ordner.lower():
+                continue
+            treffer.append(eintrag)
+        except Exception:
+            continue
+    treffer.sort(key=lambda e: e['zeit'], reverse=True)
+    return treffer[:grenze]
+
+
 def hole_faden(name, ordner_arg):
     reg = lade()
     if name in reg:
@@ -101,6 +153,43 @@ def main():
             pfad = sitzungsdatei(e['kennung'], e['ordner'])
             zeilen = sum(1 for _ in open(pfad, encoding='utf-8')) if pfad else 0
             print(f"  {name:14} {e['kennung']}  {zeilen:>4} Zeilen  {e['ordner']}")
+        return
+
+    if a.befehl == 'suchen':
+        import datetime
+        wort = a.rest[0] if a.rest else None
+        gefunden = sitzungen(wort)
+        if not gefunden:
+            print('Keine passende Sitzung gefunden.')
+            return
+        for e in gefunden:
+            wann = datetime.datetime.fromtimestamp(e['zeit']).strftime('%d.%m. %H:%M')
+            print(f"  {e['kennung']}  {wann}  {e['erste']}")
+        print('\nEinen davon binden: faden.py setzen <thema> <kennung>')
+        return
+
+    if a.befehl == 'setzen':
+        if len(a.rest) < 2:
+            sys.exit('Aufruf: faden.py setzen <thema> <kennung>')
+        name, kennung = a.rest[0], a.rest[1]
+        pfad = sitzungsdatei(kennung, None)
+        if not pfad:
+            sys.exit(f'Sitzung {kennung} nicht gefunden. faden.py suchen zeigt alle.')
+        reg = lade()
+        reg[name] = {'kennung': kennung, 'ordner': os.getcwd()}
+        # Ordner sauber aus dem Sitzungsinhalt holen
+        try:
+            with open(pfad, encoding='utf-8') as f:
+                for zeile in f:
+                    d = json.loads(zeile)
+                    if d.get('cwd'):
+                        reg[name]['ordner'] = d['cwd']
+                        break
+        except Exception:
+            pass
+        sichere(reg)
+        print(f"Faden \"{name}\" zeigt jetzt auf {kennung}")
+        print(f"  Ordner: {reg[name]['ordner']}")
         return
 
     if a.befehl == 'lesen':
