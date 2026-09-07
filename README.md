@@ -56,7 +56,8 @@ Hast du einen MCP-Server namens claude? Wenn ja, nenne fuenf seiner Werkzeuge un
 Werkzeug Bash auf mit dem Befehl `echo VERBINDUNG-OK`.
 ```
 
-Erwartet: er nennt unter anderem `Agent`, `Bash`, `Read`, `Edit`, `Write` und zeigt `VERBINDUNG-OK`.
+Erwartet: er nennt unter anderem `Bash`, `Read`, `Edit`, `Write`, `Skill` und zeigt `VERBINDUNG-OK`.
+(Das ebenfalls gelistete Werkzeug `Agent` funktioniert ueber die Bruecke nicht, siehe SKILL.md.)
 
 ## Was das kostet
 
@@ -67,7 +68,7 @@ Erwartet: er nennt unter anderem `Agent`, `Bash`, `Read`, `Edit`, `Write` und ze
 | `claude -p "<Auftrag>"` | ja | Claude-Abo |
 
 Der guenstige Normalfall ist deshalb: Codex liest Claudes Skills und arbeitet selbst damit.
-Erst wenn Claudes Urteil gebraucht wird, geht die ganze Aufgabe an `Agent`.
+Erst wenn Claudes Urteil gebraucht wird, geht die ganze Aufgabe an `claude -p`.
 
 ## Sicherheit
 

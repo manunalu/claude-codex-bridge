@@ -67,8 +67,9 @@ Hast du einen MCP-Server namens claude? Wenn ja, nenne fuenf seiner Werkzeuge un
 Werkzeug Bash auf mit dem Befehl `echo VERBINDUNG-OK`.
 ```
 
-Richtige Antwort: Er nennt unter anderem `Agent`, `Bash`, `Read`, `Edit`, `Write` und zeigt
-`VERBINDUNG-OK`.
+Richtige Antwort: Er nennt unter anderem `Bash`, `Read`, `Edit`, `Write`, `Skill` und zeigt
+`VERBINDUNG-OK`. Das ebenfalls gelistete `Agent` funktioniert ueber die Bruecke nicht, ganze
+Aufgaben gehen mit `claude -p "<Auftrag>"`.
 
 ---
 
