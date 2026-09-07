@@ -282,7 +282,14 @@ def main():
     cmd += [auftrag]
 
     print(f'Faden "{name}" ({"neu" if neu else "fortgesetzt"}), Ordner {ordner}', file=sys.stderr)
-    r = subprocess.run(cmd, cwd=ordner)
+    try:
+        r = subprocess.run(cmd, cwd=ordner)
+    except OSError as fehler:
+        print(f'claude liess sich nicht starten: {fehler}', file=sys.stderr)
+        print(SANDKASTEN_HINWEIS, file=sys.stderr)
+        sys.exit(4)
+    if r.returncode != 0:
+        print(SANDKASTEN_HINWEIS, file=sys.stderr)
     if r.returncode == 0:
         print(f'\n[Faden: {name} · {e["kennung"]}]', file=sys.stderr)
     sys.exit(r.returncode)

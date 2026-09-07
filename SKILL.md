@@ -186,6 +186,12 @@ python3 ~/.agents/skills/claude-codex/scripts/faden.py <thema> "<vollstaendiger 
 python3 ~/.agents/skills/claude-codex/scripts/faden.py lesen <thema> [--anzahl 3]
 ```
 
+**Wichtig fuer Codex: `faden.py` ueber Claudes Werkzeug `Bash` aufrufen, nicht ueber die eigene
+Shell.** Codex' Sandkasten darf nur im Projektordner schreiben; die Faden-Liste und Claudes
+Sitzungen liegen ausserhalb. In der eigenen Shell scheitern deshalb `koppeln` und jede Uebergabe
+mit Rueckgabewert 4. Ueber `claude.Bash` laeuft derselbe Befehl ausserhalb des Sandkastens und
+funktioniert. Nur-Lese-Befehle (`liste`, `lesen`, `suchen`) gehen auch in der eigenen Shell.
+
 **Regel: bei jeder Uebergabe den passenden Faden nehmen, nicht `claude -p` blank.** Nur wenn kein
 Thema passt, einen neuen anlegen (`--ordner` setzt den Projektordner) oder blank arbeiten.
 
