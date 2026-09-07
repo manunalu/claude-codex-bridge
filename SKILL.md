@@ -145,7 +145,7 @@ Vor jedem Lauf Modell und Denkstufe bewusst waehlen. Fuer Fliessbandarbeit die n
 | **Review-Tor** | Der Stop-Hook des Codex-Plugins unterscheidet nicht zwischen "Codex sagt Nein" und "Codex lief gar nicht" (Zeitlimit, Kontingent leer). Beides blockt, Claude wacht auf, es beginnt von vorne. Offenes Problem im Plugin. | Das Review-Tor aus lassen. Es ist standardmaessig aus. |
 | **Kontext wird neu berechnet** | Claudes Zwischenspeicher haelt nur wenige Minuten. Ein langer Codex-Lauf ueberschreitet das, danach wird der ganze Kontext neu abgerechnet. Der leiseste Kostenfresser. | Codex-Laeufe im Hintergrund starten und weiterarbeiten, statt zu warten. |
 | **Codex liest im Kreis** | Bei Reviews ueber viele Dateien faengt er wieder von vorne an. | Hartes Zeitlimit setzen, Auftrag eng fassen. |
-| **Zeitlimit zu kurz** | Standard sind 60 Sekunden pro Werkzeugaufruf. Echte Auftraege dauern laenger und brechen ab. | `tool_timeout_sec = 300` in der Codex-Konfiguration. |
+| **Zeitlimit zu kurz** | Standard sind 60 Sekunden pro Werkzeugaufruf. Echte Auftraege dauern laenger und brechen ab. Ein Artifact oder ein Build braucht mehrere Minuten. | `tool_timeout_sec = 900` in der Codex-Konfiguration. |
 | **Sitzung geht verloren** | Ueber die Bruecke geht ein Text, kein Gespraech. Rueckfragen im selben Faden sind unzuverlaessig. | Auftrag vollstaendig formulieren. Ergebnis holen, nicht nachverhandeln. |
 | **Dateikonflikte** | Beide schreiben dieselbe Datei. | Worktree, siehe Regeln. |
 | **Stille API-Abrechnung** | Ist `ANTHROPIC_API_KEY` gesetzt, laeuft Claude nicht ueber das Abo, sondern zu API-Preisen. | Variable nicht setzen. |
