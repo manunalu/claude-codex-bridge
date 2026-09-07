@@ -239,6 +239,12 @@ Ein Faden ist eine echte Claude-Sitzung mit fester Kennung, sie liegt beim Proje
 Der Mensch findet sie in der Claude-App unter diesem Ordner. Nach der Uebergabe sagt der rufende
 Agent den Fadennamen, damit der Mensch weiss, wo er nachschauen kann.
 
+**Der Mensch muss den Chat einmal neu oeffnen.** Die Claude-App liest die Sitzungsdatei beim
+Laden und danach nicht mehr. Eine von aussen angehaengte Antwort erscheint deshalb erst, wenn der
+Chat gewechselt und wieder geoeffnet wird. Nach einer Uebergabe also dazusagen: "einmal wegklicken
+und wieder oeffnen". Belegt am 07.09.2026 mit zwei Testzuegen; an der Herkunft (`entrypoint`)
+liegt es NICHT, `mcp` und `claude-desktop` werden beide angezeigt.
+
 **Vorsicht:** Nicht in einen Faden schreiben, den der Mensch gerade offen hat. Zwei Schreiber auf
 derselben Sitzung vertragen sich nicht. Im Zweifel `lesen` statt schreiben, oder einen neuen Faden.
 
