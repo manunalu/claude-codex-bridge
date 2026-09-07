@@ -175,6 +175,29 @@ Vor jedem Lauf Modell und Denkstufe bewusst waehlen. Fuer Fliessbandarbeit die n
 
 ---
 
+## 8. Themen-Faeden: ein Chat je Thema, den beide sehen
+
+Ohne Faeden entsteht bei jeder Uebergabe ein neuer, leerer Chat. Mit Faeden landet alles zum selben
+Thema im selben Chat, und der Mensch oeffnet ihn in seiner Claude-App und sieht die ganze Geschichte.
+
+```sh
+python3 ~/.agents/skills/claude-codex/scripts/faden.py liste
+python3 ~/.agents/skills/claude-codex/scripts/faden.py <thema> "<vollstaendiger Auftrag>" [--modell fable]
+python3 ~/.agents/skills/claude-codex/scripts/faden.py lesen <thema> [--anzahl 3]
+```
+
+**Regel: bei jeder Uebergabe den passenden Faden nehmen, nicht `claude -p` blank.** Nur wenn kein
+Thema passt, einen neuen anlegen (`--ordner` setzt den Projektordner) oder blank arbeiten.
+
+Ein Faden ist eine echte Claude-Sitzung mit fester Kennung, sie liegt beim Projektordner des Themas.
+Der Mensch findet sie in der Claude-App unter diesem Ordner. Nach der Uebergabe sagt der rufende
+Agent den Fadennamen, damit der Mensch weiss, wo er nachschauen kann.
+
+**Vorsicht:** Nicht in einen Faden schreiben, den der Mensch gerade offen hat. Zwei Schreiber auf
+derselben Sitzung vertragen sich nicht. Im Zweifel `lesen` statt schreiben, oder einen neuen Faden.
+
+---
+
 ## 7. Sicherheit
 
 Ueber `claude.Bash` umgeht Codex seine eigene Sandbox, und Claude fragt dabei nicht nach. Das ist der

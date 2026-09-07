@@ -37,6 +37,11 @@ funktioniert ueber die Bruecke nicht.
 Texte und schwierige Urteile; `sonnet` fuer Fliessbandarbeit. Manu steuert mit Worten: „gruendlich"
 heisst `fable`, „schnell" heisst `sonnet`. Nennt er ein Modell, gilt seins.
 
+**Themen-Faeden.** Bei einer Uebergabe nicht `claude -p` blank rufen, sondern den passenden Faden:
+`python3 ~/.agents/skills/claude-codex/scripts/faden.py <thema> "<Auftrag>"` (Themen mit `liste`).
+So landet alles zum selben Thema im selben Claude-Chat, den Manu in seiner App oeffnen kann. Nach der
+Uebergabe den Fadennamen nennen. Nie in einen Faden schreiben, den Manu gerade offen hat.
+
 **Kosten.** `Skill`, `Bash`, `Read`, `Edit`, `Write` kosten nichts beim anderen Abo, weil dort kein
 Modell denkt. `claude -p` schon. Also erst das Wissen holen, und nur abgeben, wenn das
 Urteil des anderen Modells wirklich gebraucht wird.

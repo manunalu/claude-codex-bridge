@@ -86,6 +86,8 @@ echo "3. Skill 'claude-codex' ablegen"
 SKILLS="$HOME/.agents/skills/claude-codex"
 mkdir -p "$SKILLS"
 cp "$HIER/SKILL.md" "$SKILLS/SKILL.md" && ok "$SKILLS/SKILL.md"
+mkdir -p "$SKILLS/scripts"
+cp "$HIER/scripts/faden.py" "$SKILLS/scripts/faden.py" && chmod +x "$SKILLS/scripts/faden.py" && ok "$SKILLS/scripts/faden.py"
 # Claude liest ~/.claude/skills; falls das kein Symlink auf ~/.agents/skills ist, dort zusaetzlich verlinken
 if [ -d "$HOME/.claude/skills" ] && [ ! -e "$HOME/.claude/skills/claude-codex" ]; then
   ln -s "$SKILLS" "$HOME/.claude/skills/claude-codex" 2>/dev/null && ok "auch fuer Claude verlinkt"
