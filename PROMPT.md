@@ -75,7 +75,7 @@ Richtige Antwort: Er nennt unter anderem `Agent`, `Bash`, `Read`, `Edit`, `Write
 ## Was das kostet
 
 - `Bash`, `Read`, `Edit`, `Write`, `Skill`: kein Claude-Modell denkt dabei, also nur Codex-Token.
-- `Agent`, `Workflow`: hier denkt ein echtes Claude-Modell, das laeuft ueber das Claude-Abo.
+- `claude -p "<Auftrag>"`: hier denkt ein echtes Claude-Modell, das laeuft ueber das Claude-Abo.
 
 ---
 

@@ -42,7 +42,8 @@ Wer es lieber von Codex selbst einrichten laesst: der fertige Text zum Einfuegen
 
 ## Voraussetzungen
 
-- Claude Code (angemeldet)
+- Claude Code, **in der Kommandozeile angemeldet**: `claude auth status` muss `loggedIn: true` zeigen,
+  sonst `claude auth login`. Ohne das fehlen Websuche und die Abgabe ganzer Aufgaben.
 - Codex CLI und die ChatGPT-App (angemeldet)
 - macOS oder Linux. Auf Windows funktionieren die Eintraege, das Skript nicht.
 
@@ -63,7 +64,7 @@ Erwartet: er nennt unter anderem `Agent`, `Bash`, `Read`, `Edit`, `Write` und ze
 |---|---|---|
 | `Bash`, `Read`, `Edit`, `Write` | nein, reine Ausfuehrung | nur Codex |
 | `Skill` | nein, die Anleitung wandert in Codex' Kontext | nur Codex |
-| `Agent`, `Workflow` | ja | Claude-Abo |
+| `claude -p "<Auftrag>"` | ja | Claude-Abo |
 
 Der guenstige Normalfall ist deshalb: Codex liest Claudes Skills und arbeitet selbst damit.
 Erst wenn Claudes Urteil gebraucht wird, geht die ganze Aufgabe an `Agent`.

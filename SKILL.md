@@ -81,17 +81,21 @@ andere Agent, und der Mensch nimmt ab.**
 
 ### Codex ruft Claude
 
-| Zweck | Werkzeug |
+| Zweck | Wie |
 |---|---|
-| Ganze Aufgabe abgeben | `claude.Agent` |
-| Claudes Wissen nutzen, selbst arbeiten | `claude.Skill` (die Anleitung wandert in den eigenen Kontext) |
+| Claudes Wissen nutzen, selbst arbeiten | `claude.Skill` mit dem Skill-Namen. Die Anleitung wandert in den eigenen Kontext. |
 | Dateien lesen und schreiben | `claude.Read`, `claude.Edit`, `claude.Write`, `claude.Bash` |
-| Seite veroeffentlichen | `claude.Artifact` |
-| Mehrere Pruefer parallel | `claude.Workflow` |
+| Im Netz suchen | `claude.WebSearch` |
+| **Ganze Aufgabe abgeben** | **`claude -p "<vollstaendiger Auftrag>"` in der Shell** (oder ueber `claude.Bash`). Das startet einen kompletten Claude mit Skills, Projektregeln und Gedaechtnis. |
 
-**Der guenstige Normalfall ist `Skill`, nicht `Agent`.** `Skill` laesst den rufenden Agenten mit dem
-Wissen des anderen arbeiten und kostet nichts beim anderen Abo. `Agent` ist fuer die Faelle, in denen
-das Urteil des anderen Modells gebraucht wird.
+**Wichtig:** Das Werkzeug `claude.Agent` funktioniert ueber die Bruecke **nicht** (der kopflose Claude
+kennt keine Agenten-Typen, Antwort "Available agents: none"). Fuer ganze Aufgaben immer `claude -p`
+benutzen. Geprueft am 07.09.2026, Antwort in rund 16 Sekunden, mit Zugriff auf die geteilten Skills
+und die Projektregeln.
+
+**Der guenstige Normalfall ist `Skill`, nicht `claude -p`.** `Skill` laesst den rufenden Agenten mit
+dem Wissen des anderen arbeiten und kostet nichts beim anderen Abo. `claude -p` ist fuer die Faelle,
+in denen das Urteil des anderen Modells gebraucht wird.
 
 ---
 
@@ -122,7 +126,7 @@ das Urteil des anderen Modells gebraucht wird.
 |---|---|---|
 | `Bash`, `Read`, `Edit`, `Write` | nein | nur der Rufende |
 | `Skill` | nein | nur der Rufende |
-| `Agent`, `Workflow` | ja | das andere Abo |
+| `claude -p`, `Workflow` | ja | das andere Abo |
 | `/codex:review`, `/codex:rescue`, `mcp__codex__codex` | ja | ChatGPT-Abo |
 
 Vor jedem Lauf Modell und Denkstufe bewusst waehlen. Fuer Fliessbandarbeit die niedrige Stufe.

@@ -26,12 +26,13 @@ Nach jedem langen selbstaendigen Lauf prueft der andere Agent, denn gruene Tests
 Codebasen nichts.
 
 **Uebergabe.** Claude ruft Codex mit `/codex:review`, `/codex:adversarial-review`, `/codex:rescue`
-oder dem Werkzeug `mcp__codex__codex`. Codex ruft Claude mit `claude.Agent` (ganze Aufgabe),
-`claude.Skill` (Wissen holen und selbst arbeiten), `claude.Bash` / `Read` / `Edit` / `Write`,
-`claude.Artifact`, `claude.Workflow`.
+oder dem Werkzeug `mcp__codex__codex`. Codex ruft Claude mit `claude.Skill` (Wissen holen und
+selbst arbeiten), `claude.Bash` / `Read` / `Edit` / `Write` / `WebSearch`, und fuer eine **ganze
+Aufgabe** mit `claude -p "<vollstaendiger Auftrag>"` in der Shell. Das Werkzeug `claude.Agent`
+funktioniert ueber die Bruecke nicht.
 
 **Kosten.** `Skill`, `Bash`, `Read`, `Edit`, `Write` kosten nichts beim anderen Abo, weil dort kein
-Modell denkt. `Agent` und `Workflow` schon. Also erst das Wissen holen, und nur abgeben, wenn das
+Modell denkt. `claude -p` schon. Also erst das Wissen holen, und nur abgeben, wenn das
 Urteil des anderen Modells wirklich gebraucht wird.
 
 **Eiserne Regeln.**
