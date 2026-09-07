@@ -16,17 +16,21 @@ Aufrufe:
   faden.py suchen [wort]                          bestehende Claude-Sitzungen zeigen (zum Ansteuern)
   faden.py setzen <thema> <kennung>               Faden auf eine BESTEHENDE Sitzung zeigen lassen
   faden.py koppeln <thema> [codex-kennung]        diesen Codex-Thread fest an den Faden haengen
-  faden.py hier "<auftrag>"                       Auftrag in den Faden geben, der zu DIESEM Codex-Thread gehoert
+  faden.py hier "<auftrag>" [--thread <kennung>]   Auftrag in den Faden geben, der zu DIESEM Codex-Thread gehoert
   faden.py <thema> ... --ordner /pfad             Arbeitsordner beim Anlegen festlegen
 
 Kopplung: Codex setzt in jedem Zug CODEX_THREAD_ID. Wer einmal `koppeln` ausfuehrt, merkt sich
 diese Kennung im Faden. Danach findet `hier` den richtigen Faden von allein, ohne dass jemand
 das Thema tippen muss.
 
+Achtung: Claudes Werkzeug Bash laeuft in einem eigenen Prozess und kennt CODEX_THREAD_ID NICHT.
+Deshalb sucht `hier` die Kennung notfalls selbst in Codex' Zustandsdatei (der einzige gekoppelte
+Thread, der gerade lief). Ist das nicht eindeutig, die Kennung mit --thread mitgeben.
+
 Der Faden gehoert zu einem Ordner, weil Claude-Sitzungen pro Projektordner liegen. Ohne --ordner
 wird der aktuelle Ordner genommen.
 """
-import argparse, glob, json, os, subprocess, sys, uuid
+import argparse, glob, json, os, sqlite3, subprocess, sys, time, uuid
 
 REGISTER = os.path.expanduser('~/.claude-codex-bridge/faeden.json')
 
@@ -122,9 +126,27 @@ def sitzungen(suchwort=None, grenze=25):
     return treffer[:grenze]
 
 
-def codex_thread():
-    """Kennung des Codex-Threads, aus dem dieser Aufruf kommt (leer, wenn nicht aus Codex)."""
+def codex_thread(mitgegeben=None):
+    """Kennung des Codex-Threads: erst --thread, dann die Umgebungsvariable."""
+    if mitgegeben:
+        return mitgegeben.strip()
     return os.environ.get('CODEX_THREAD_ID', '').strip()
+
+
+def codex_threads_gerade_aktiv(fenster_sek=300):
+    """Codex-Threads, die eben noch liefen. Aus Codex' eigener Zustandsdatei, nur lesend."""
+    for pfad in sorted(glob.glob(os.path.expanduser('~/.codex/state_*.sqlite')), reverse=True):
+        try:
+            con = sqlite3.connect(f'file:{pfad}?mode=ro', uri=True, timeout=2)
+            grenze = int(time.time() * 1000) - fenster_sek * 1000
+            zeilen = con.execute(
+                'select id from threads where updated_at_ms > ? order by updated_at_ms desc',
+                (grenze,)).fetchall()
+            con.close()
+            return [z[0] for z in zeilen]
+        except Exception:
+            continue
+    return []
 
 
 def faden_zu_codex(kennung):
@@ -157,6 +179,7 @@ def main():
     ap.add_argument('rest', nargs='*')
     ap.add_argument('--modell', default=None, help='opus (Standard), fable, sonnet, haiku')
     ap.add_argument('--ordner', default=None)
+    ap.add_argument('--thread', default=None, help='Codex-Thread-Kennung, wenn CODEX_THREAD_ID fehlt')
     ap.add_argument('--anzahl', type=int, default=3)
     ap.add_argument('-h', '--help', action='store_true')
     a = ap.parse_args()
@@ -219,7 +242,7 @@ def main():
         if not a.rest:
             sys.exit('Aufruf: faden.py koppeln <thema> [codex-kennung]')
         name = a.rest[0]
-        kennung = a.rest[1] if len(a.rest) > 1 else codex_thread()
+        kennung = a.rest[1] if len(a.rest) > 1 else codex_thread(a.thread)
         if not kennung:
             sys.exit('Keine Codex-Kennung. Entweder mitgeben oder aus einem Codex-Zug heraus aufrufen.')
         reg = lade()
@@ -252,9 +275,23 @@ def main():
     # Auftrag in einen Faden geben
     name = a.befehl
     if name == 'hier':
-        ct = codex_thread()
+        ct = codex_thread(a.thread)
         if not ct:
-            sys.exit('CODEX_THREAD_ID ist nicht gesetzt. "hier" geht nur aus einem Codex-Zug heraus.')
+            moeglich = [t for t in codex_threads_gerade_aktiv() if faden_zu_codex(t)]
+            if len(moeglich) == 1:
+                ct = moeglich[0]
+                print(f'Kennung selbst gefunden: der einzige gekoppelte Codex-Thread, der gerade lief ({ct}).',
+                      file=sys.stderr)
+            else:
+                print('Ich weiss nicht, aus welchem Codex-Thread das kommt.', file=sys.stderr)
+                if moeglich:
+                    print('Mehrere gekoppelte Threads liefen gerade:', file=sys.stderr)
+                    for t in moeglich:
+                        print(f'  {t}  ->  Faden "{faden_zu_codex(t)}"', file=sys.stderr)
+                print('So geht es: in deiner EIGENEN Codex-Shell "echo $CODEX_THREAD_ID" ausfuehren\n'
+                      'und den Wert hier mitgeben: faden.py hier "<Auftrag>" --thread <kennung>',
+                      file=sys.stderr)
+                sys.exit(3)
         treffer = faden_zu_codex(ct)
         if not treffer:
             print(f'Dieser Codex-Thread ({ct}) haengt an keinem Faden.', file=sys.stderr)

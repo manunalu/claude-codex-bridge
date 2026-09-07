@@ -210,6 +210,19 @@ Codex besprochen wird, landet beim Uebergeben immer im selben Claude-Chat.
 **Regel fuer Codex: in einem gekoppelten Thread immer `faden.py hier` nehmen.** Erst wenn das
 mit Rueckgabewert 2 meldet, dass keine Kopplung besteht, das Thema selbst waehlen.
 
+**Falle: Claudes Werkzeug `Bash` kennt `CODEX_THREAD_ID` nicht.** Es laeuft in einem eigenen,
+lang lebenden Prozess, nicht in Codex' Zug. Der Aufruf muss aber trotzdem ueber `claude.Bash`
+laufen, sonst scheitert er am Sandkasten. Deshalb sucht `hier` die Kennung notfalls selbst in
+Codex' Zustandsdatei und nimmt den einzigen gekoppelten Thread, der gerade lief. Ist das nicht
+eindeutig, bricht es mit Rueckgabewert 3 ab und will die Kennung mitgeteilt bekommen:
+
+```sh
+# in Codex' EIGENER Shell, das ist nur Lesen und geht dort:
+echo $CODEX_THREAD_ID
+# dann ueber claude.Bash:
+faden.py hier "<Auftrag>" --thread <kennung>
+```
+
 **Einen bestehenden Chat als Faden nehmen.** Es muss kein leerer neuer sein:
 
 ```sh
