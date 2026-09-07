@@ -47,3 +47,6 @@ Urteil des anderen Modells wirklich gebraucht wird.
 - Arbeiten beide gleichzeitig am selben Projekt, bekommt der zweite einen eigenen `git worktree`.
 - Der Auftrag muss allein stehen: Pfade, Ziel, Grenzen, und was "fertig" heisst.
 - Lange Laeufe in den Hintergrund legen, nicht wartend blockieren.
+- **Sag es, statt es schlecht zu machen:** koennte der andere es deutlich besser und wuerde die
+  Uebergabe das Ergebnis verschlechtern, sag es in EINEM Satz und frag kurz nach. Nie einen Ersatz
+  fuer eine fremde Faehigkeit bauen, ohne das zu sagen.

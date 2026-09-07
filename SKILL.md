@@ -121,6 +121,12 @@ in denen das Urteil des anderen Modells gebraucht wird.
   einen eigenen `git worktree` daneben. Sonst ueberschreibt einer die Datei des anderen.
 - **Der Auftrag muss allein stehen.** Ueber die Grenze geht ein einzelner Text, keine Sitzung. Pfade,
   Ziel, Grenzen und was "fertig" heisst gehoeren hinein.
+- **Sag es, statt es schlecht zu machen.** Merkst du, dass der andere Agent eine Aufgabe deutlich
+  besser koennte und die Uebergabe das Ergebnis verschlechtern wuerde, dann sag Manu in EINEM Satz
+  „dafuer ist X besser, soll ich uebergeben oder machst du es dort?" und warte kurz. Manu soll nie
+  raten muessen, wer zustaendig ist, und nie ein schlechteres Ergebnis bekommen, nur weil eine
+  Uebergabe technisch moeglich war. Baue niemals einen Ersatz fuer eine Faehigkeit, die der andere
+  hat (kein GitHub-Issue statt einer Abhakliste), ohne das ausdruecklich zu sagen.
 - **Lange Laeufe in den Hintergrund.** Warten kostet doppelt, siehe Fallen.
 
 ---
