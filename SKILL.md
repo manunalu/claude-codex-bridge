@@ -240,6 +240,18 @@ Ein Faden ist eine echte Claude-Sitzung mit fester Kennung, sie liegt beim Proje
 Der Mensch findet sie in der Claude-App unter diesem Ordner. Nach der Uebergabe sagt der rufende
 Agent den Fadennamen, damit der Mensch weiss, wo er nachschauen kann.
 
+**Volle Faeden sind der groesste Kostenblock.** Jede Anfrage schickt den ganzen Verlauf erneut mit,
+auch fuer eine Antwort mit 600 Token. Gemessen am 08.09.2026 in einem echten Thread: eine einzelne
+Anfrage trug 196.717 Token bei einem Fenster von 258.400. Darum fuer neue Themen frische Faeden:
+
+```sh
+faden.py umbenennen app app-alt   # den vollen zur Seite raeumen, er bleibt lesbar
+faden.py neu app                  # frischen anlegen (--ordner setzt den Projektordner)
+```
+
+Ein frischer Faden ist nicht ahnungslos: er liest die Regeldateien des Projekts und den Stand aus
+dem Repo. Das Gedaechtnis liegt im Repo, nicht im Chat.
+
 **Der Mensch muss den Chat einmal neu oeffnen.** Die Claude-App liest die Sitzungsdatei beim
 Laden und danach nicht mehr. Eine von aussen angehaengte Antwort erscheint deshalb erst, wenn der
 Chat gewechselt und wieder geoeffnet wird. Nach einer Uebergabe also dazusagen: "einmal wegklicken

@@ -15,6 +15,8 @@ Aufrufe:
   faden.py lesen <thema> [--anzahl 3]             letzte Antworten aus dem Faden lesen
   faden.py suchen [wort]                          bestehende Claude-Sitzungen zeigen (zum Ansteuern)
   faden.py setzen <thema> <kennung>               Faden auf eine BESTEHENDE Sitzung zeigen lassen
+  faden.py neu <thema> [--ordner /pfad]           frischen, leeren Faden anlegen (billig und schnell)
+  faden.py umbenennen <alt> <neu>                 Faden umbenennen, z.B. app -> app-alt
   faden.py koppeln <thema> [codex-kennung]        diesen Codex-Thread fest an den Faden haengen
   faden.py hier "<auftrag>" [--thread <kennung>]   Auftrag in den Faden geben, der zu DIESEM Codex-Thread gehoert
   faden.py <thema> ... --ordner /pfad             Arbeitsordner beim Anlegen festlegen
@@ -236,6 +238,38 @@ def main():
         sichere(reg)
         print(f"Faden \"{name}\" zeigt jetzt auf {kennung}")
         print(f"  Ordner: {reg[name]['ordner']}")
+        return
+
+    if a.befehl == 'neu':
+        if not a.rest:
+            sys.exit('Aufruf: faden.py neu <thema> [--ordner /pfad]')
+        name = a.rest[0]
+        reg = lade()
+        if name in reg:
+            sys.exit(f'Faden "{name}" gibt es schon. Erst umbenennen: faden.py umbenennen {name} {name}-alt')
+        ordner = os.path.abspath(os.path.expanduser(a.ordner or os.getcwd()))
+        if not os.path.isdir(ordner):
+            sys.exit(f'Ordner gibt es nicht: {ordner}')
+        reg[name] = {'kennung': str(uuid.uuid4()), 'ordner': ordner}
+        sichere(reg)
+        print(f'Frischer Faden "{name}" angelegt.')
+        print(f'  Kennung: {reg[name]["kennung"]}')
+        print(f'  Ordner:  {ordner}')
+        print('  Er entsteht als Chat, sobald der erste Auftrag hineingeht.')
+        return
+
+    if a.befehl == 'umbenennen':
+        if len(a.rest) < 2:
+            sys.exit('Aufruf: faden.py umbenennen <alt> <neu>')
+        alt_name, neu_name = a.rest[0], a.rest[1]
+        reg = lade()
+        if alt_name not in reg:
+            sys.exit(f'Faden "{alt_name}" gibt es nicht.')
+        if neu_name in reg:
+            sys.exit(f'Faden "{neu_name}" gibt es schon.')
+        reg[neu_name] = reg.pop(alt_name)
+        sichere(reg)
+        print(f'Faden "{alt_name}" heisst jetzt "{neu_name}". Kopplungen bleiben dran.')
         return
 
     if a.befehl == 'koppeln':
