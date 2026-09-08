@@ -32,12 +32,23 @@ durchdenken".
 | Faehigkeit | Warum |
 |---|---|
 | **Artifacts** | Veroeffentlichbare Seiten mit eigener Adresse, mit Zustand und Datenbank. Abhaklisten, an denen der Mensch Haken setzt und kommentiert, die der Agent spaeter wieder liest. **Kein Ersatz bauen:** wer eine Abhakliste braucht, gibt sie ab (`claude -p`), statt sie als GitHub-Issue oder Textliste nachzubilden. |
-| **Unteragenten und Workflow** | Mehrere Pruefer parallel, ein Verifizierer dagegen. Fuer Audits und Konzile. |
-| **Gedaechtnis ueber Sitzungen** | Entscheidungen und Vorlieben bleiben, ohne dass jemand sie erneut erklaert. |
-| **iOS-Simulator** | App starten, tippen, Screenshot pruefen. |
+| **Tippen und Wischen im iOS-Simulator** | `simctl` kennt keinen Fingerdruck. Alles andere am Simulator kann Codex selbst, siehe unten. |
 
 Wenn eine Aufgabe eine dieser Faehigkeiten braucht, geht sie dorthin. Auch dann, wenn der andere
 Agent gerade vorne sitzt.
+
+**Diese Liste war frueher laenger, und das war falsch.** Geprueft am 08.09.2026:
+
+- **Gedaechtnis ueber Sitzungen** hat Codex auch (`[features] memories = true`, Ablage
+  `~/.codex/memories`). Kein Alleinstellungsmerkmal.
+- **Unteragenten** hat Codex auch. Kein Alleinstellungsmerkmal.
+- **iOS-Simulator** kann Codex fast vollstaendig: bauen, installieren, starten, Bildschirmfoto,
+  Berechtigungen, Benachrichtigungen, Tiefenlinks, Aufnahme. Nur Tippen und Wischen nicht. Der
+  Skill `ios-simulator` enthaelt die Befehle. Statt zu tippen lohnt fast immer ein
+  Start-Argument, das die App direkt auf den gewuenschten Bildschirm bringt.
+
+Vor dem Abgeben also pruefen, ob der andere es wirklich nicht kann. Eine Uebergabe aus Gewohnheit
+kostet zwei zusaetzliche Zuege und bringt nichts.
 
 ### Beide koennen es, keine Uebergabe noetig
 
